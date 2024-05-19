@@ -14,10 +14,10 @@ class BaseModel:
         """
         if kwargs:
             for key, value in kwargs.items():
+                if key == 'created_at' or key == 'updated_at':
+                    value = datetime.fromisoformat(value)
                 if key != '__class__':
                     setattr(self, key, value)
-                self.created_at = datetime.fromisoformat(kwargs['created_at'])
-                self.updated_at = datetime.fromisoformat(kwargs['updated_at'])
         else:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
@@ -38,9 +38,10 @@ class BaseModel:
 
     def to_dict(self):
         """
-        Returns a dictionary containing all
-        keys/values of __dict__ of the instance.
+        Returns a dictionary containing all keys/values
+        of __dict__ of the instance.
         """
+
         instance_dict = self.__dict__.copy()
         instance_dict['__class__'] = self.__class__.__name__
         instance_dict['created_at'] = self.created_at.isoformat()
