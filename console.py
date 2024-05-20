@@ -102,24 +102,14 @@ class HBNBCommand(cmd.Cmd):
         """
         Show all instances of a class or all classes.
         """
-        if '.' in arg and arg.split('.')[1] == 'all()':
-            class_name = arg.split('.')[0]
-            if class_name not in globals():
-                print("** class doesn't exist **")
-                return
-            instances = storage.all()
-            instances = {k: val for k, val in instances.items()
-                         if k.startswith(class_name)}
-            print([str(obj) for obj in instances.val()])
-        else:
-            if arg and arg not in globals():
-                print("** class doesn't exist **")
-                return
-            instances = storage.all()
-            if arg:
-                instances = {k: val for k, val in instances.items()
-                             if k.startswith(arg)}
-            print([str(obj) for obj in instances.val()])
+        if arg and arg not in globals():
+            print("** class doesn't exist **")
+            return
+        instances = storage.all()
+        if arg:
+            instances = {key: val for key, val in instances.items()
+                         if key.startswith(arg)}
+        print([str(obj) for obj in instances.values()])
 
     def do_update(self, arg):
         """
@@ -136,8 +126,8 @@ class HBNBCommand(cmd.Cmd):
         if len(args) < 2:
             print("** instance id missing **")
             return
-        k = f"{args[0]}.{args[1]}"
-        if k not in storage.all():
+        key = f"{args[0]}.{args[1]}"
+        if key not in storage.all():
             print("** no instance found **")
             return
         if len(args) < 3:
@@ -146,7 +136,7 @@ class HBNBCommand(cmd.Cmd):
         if len(args) < 4:
             print("** value missing **")
             return
-        instance = storage.all()[k]
+        instance = storage.all()[key]
         setattr(instance, args[2], args[3])
         instance.save()
 
