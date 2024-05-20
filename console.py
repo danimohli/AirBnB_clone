@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 """
-Cmd or Shell for HBH
+Cmd or Shell for HBNB
 """
 
 import cmd
@@ -102,14 +102,24 @@ class HBNBCommand(cmd.Cmd):
         """
         Show all instances of a class or all classes.
         """
-        if arg and arg not in globals():
-            print("** class doesn't exist **")
-            return
-        instances = storage.all()
-        if arg:
-            instances = {key: val for key, val in instances.items()
-                         if key.startswith(arg)}
-        print([str(obj) for obj in instances.values()])
+        if '.' in arg and arg.split('.')[1] == 'all()':
+            class_name = arg.split('.')[0]
+            if class_name not in globals():
+                print("** class doesn't exist **")
+                return
+            instances = storage.all()
+            instances = {k: val for k, val in instances.items()
+                         if k.startswith(class_name)}
+            print([str(obj) for obj in instances.val()])
+        else:
+            if arg and arg not in globals():
+                print("** class doesn't exist **")
+                return
+            instances = storage.all()
+            if arg:
+                instances = {k: val for k, val in instances.items()
+                             if k.startswith(arg)}
+            print([str(obj) for obj in instances.val()])
 
     def do_update(self, arg):
         """
@@ -126,8 +136,8 @@ class HBNBCommand(cmd.Cmd):
         if len(args) < 2:
             print("** instance id missing **")
             return
-        key = f"{args[0]}.{args[1]}"
-        if key not in storage.all():
+        k = f"{args[0]}.{args[1]}"
+        if k not in storage.all():
             print("** no instance found **")
             return
         if len(args) < 3:
@@ -136,7 +146,7 @@ class HBNBCommand(cmd.Cmd):
         if len(args) < 4:
             print("** value missing **")
             return
-        instance = storage.all()[key]
+        instance = storage.all()[k]
         setattr(instance, args[2], args[3])
         instance.save()
 
