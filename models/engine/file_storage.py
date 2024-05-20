@@ -1,12 +1,13 @@
 #!/usr/bin/python3
 import json
 from models.base_model import BaseModel
+from models.user import User
 
 
 class FileStorage:
     """
-    Serializes instances to a JSON file and deserializes JSON
-    file to instances.
+    Serializes instances to a JSON file and deserializes
+    JSON file to instances.
     """
 
     __file_path = "file.json"
@@ -22,14 +23,12 @@ class FileStorage:
         """
         Sets in __objects the obj with key <obj class name>.id.
         """
-
-        key = f"{obj.__class__.__name__}.{obj.id}"
-        self.__objects[key] = obj
+        k = f"{obj.__class__.__name__}.{obj.id}"
+        self.__objects[k] = obj
 
     def save(self):
         """
-        Serializes __objects to the JSON file (path:
-        __file_path).
+        Serializes __objects to the JSON file (path: __file_path).
         """
         obj_dict = {key: obj.to_dict() for key, obj in self.__objects.items()}
         with open(self.__file_path, 'w') as f:
@@ -44,7 +43,8 @@ class FileStorage:
                 obj_dict = json.load(f)
                 for key, value in obj_dict.items():
                     cls_name = key.split('.')[0]
-                    cls = globals()[cls_name]
-                    self.__objects[key] = cls(**value)
+                    cls = globals().get(cls_name)
+                    if cls:
+                        self.__objects[key] = cls(**value)
         except FileNotFoundError:
             pass
