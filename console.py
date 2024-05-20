@@ -1,15 +1,15 @@
 #!/usr/bin/python3
-
 import cmd
 from models.base_model import BaseModel
+from models.user import User
 from models import storage
 
 
 class HBNBCommand(cmd.Cmd):
-
     """
     Command interpreter for the HBNB clone project.
     """
+
     prompt = '(hbnb) '
 
     def do_quit(self, arg):
@@ -33,9 +33,10 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, arg):
         """
-        Create a new instance of BaseModel,
+        Create a new instance of BaseModel or User,
         saves it (to the JSON file), and prints the id.
         """
+
         if not arg:
             print("** class name missing **")
             return
@@ -102,9 +103,10 @@ class HBNBCommand(cmd.Cmd):
 
     def do_update(self, arg):
         """
-        Update an instance based on the class name and id by adding or
-        updating attribute.
+        Update an instance based on the class
+        name and id by adding or updating attribute.
         """
+
         args = arg.split()
         if not args:
             print("** class name missing **")
@@ -132,4 +134,4 @@ class HBNBCommand(cmd.Cmd):
 
 if __name__ == '__main__':
 
-    HBNB    Command().cmdloop()
+    HBNBCommand().cmdloop()
